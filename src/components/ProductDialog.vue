@@ -78,6 +78,7 @@ export default {
         description: this.description,
       };
       storeProduct(product_data)
+      this.dialog = false;
     }
   }
 }
