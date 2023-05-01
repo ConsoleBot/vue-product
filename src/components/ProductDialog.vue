@@ -40,7 +40,7 @@
           text
           @click="add"
         >
-          Add
+          {{action}}
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -49,41 +49,53 @@
 <script>
 import useProducts from "@/composables/products.js";
 
-const { storeProduct } = useProducts();
+const { storeProduct, updateProduct, product, getProduct} = useProducts();
 
 export default {
   name: 'ProductDialog',
   props: {
     editedId: Number,
     dialog: Boolean,
-    dialogProduct: Object,
-    title: String
+    test: Boolean,
+    title: String,
+    action: String,
   },
   watch: { 
-    dialogProduct: function(newVal) { // watch it
-      this.name = newVal.name
-      this.price = newVal.price
-      this.quantity = newVal.quantity
-      this.description = newVal.description
+    test: async function() { // watch it
+      await getProduct(this.editedId);
+      this.name = product.value.name
+      this.price = product.value.price
+      this.quantity = product.value.quantity
+      this.description = product.value.description
     }
   },
   data () {
       return {
-        name: null,
-        quantity: null,
-        price: null,
-        description: null,
+        name: product.name,
+        quantity: product.quantity,
+        price: product.price,
+        description: product.description,
       }
   },
   methods: {
     add() {
-      const product_data = {
-        name: this.name,
-        quantity: parseInt(this.quantity),
-        price: parseFloat(this.price).toFixed('2'),
-        description: this.description,
-      };
-      storeProduct(product_data);
+      if(!this.editedId){
+        const product_data = {
+          name: this.name,
+          quantity: parseInt(this.quantity),
+          price: parseFloat(this.price).toFixed('2'),
+          description: this.description,
+        };
+        storeProduct(product_data);
+      }else {
+        console.log(this.editedId)
+        product.value.name = this.name;
+        product.value.price = this.price;
+        product.value.quantity = this.quantity;
+        product.value.description = this.description;
+
+        updateProduct(this.editedId)
+      }
       this.$emit("close-dialog");
     },
     close() {

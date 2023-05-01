@@ -10,9 +10,10 @@
     </v-btn>
     <ProductDialog 
       :edited-id="editedId"
+      :test="test"
       :dialog.sync="dialog"
       :title="title"
-      :dialog-product="dialogProduct"
+      :action="action"
       @open-dialog="
         editedId = 999;
         dialog = true;
@@ -50,7 +51,7 @@
   import ProductDialog from '@/components/ProductDialog.vue'
   import useProducts from "@/composables/products.js";
   
-  const { products, getProducts, deleteProduct, getProduct, product } = useProducts();
+  const { products, getProducts, deleteProduct, getProduct } = useProducts();
 
   export default {
     name: 'ProductList',
@@ -77,10 +78,11 @@
         ],
         products: products,
         editedId: null,
+        test: false,
         dialog: false,
-        dialogProduct: null,
         renderComponent: true,
-        title: "Add New"
+        title: "Add New",
+        action: "Add"
       }
     },
     methods: {
@@ -95,9 +97,11 @@
       },
       async editItem(id) {
         await getProduct(id);
-        this.dialogProduct = product.value;
         this.title = "Edit"
+        this.action = "Edit"
+        this.editedId = id;
         this.dialog = true;
+        this.test = true;
       },
     }
   }
