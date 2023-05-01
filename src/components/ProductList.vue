@@ -6,7 +6,16 @@
       :items="products"
       :items-per-page="5"
       class="elevation-1"
-    ></v-data-table>
+    >
+    <template v-slot:[`item.actions`]="{ item }">
+      <v-icon
+        small
+        @click="productDelete(item.id)"
+      >
+        mdi-delete
+      </v-icon>
+    </template>
+    </v-data-table>
   </v-container>
 </template>
 
@@ -14,7 +23,7 @@
   import ProductDialog from '@/components/ProductDialog.vue'
   import useProducts from "@/composables/products.js";
   
-  const { products, getProducts } = useProducts();
+  const { products, getProducts, deleteProduct } = useProducts();
 
   export default {
     name: 'ProductList',
@@ -39,11 +48,18 @@
           { text: 'Name', value: 'name' },
           { text: 'Price', value: 'price' },
           { text: 'Description', value: 'description' },
-          { text: 'Actions', },
+          { text: 'Actions', value: 'actions' },
         ],
         products: products,
       }
     },
+    methods: {
+      productDelete(id) {
+        this.$nextTick(function () {
+          deleteProduct(id);
+        })
+      }
+    }
   }
 </script>
 

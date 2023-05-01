@@ -22,8 +22,7 @@ export default function useProducts(){
   const storeProduct = async (data) =>{
     try {
       await axios.post("products", data)
-      window.reload();
-      
+      await getProducts();
     } catch (error) {
         if(error.response.status === 422){
           errors.value = error.response.data.errors;
@@ -43,19 +42,20 @@ export default function useProducts(){
   //   }
   // }
 
-  // const deleteProduct = async (id) =>{
-  //   if(!window.confirm("Are you sure?")){
-  //     return;
-  //   } 
-  //   await axios.delete("products/" + id);
-  //   await getproducts();
-  // }
+  const deleteProduct = async (id) =>{
+    if(!window.confirm("Are you sure?")){
+      return;
+    } 
+    await axios.delete("products/" + id);
+    await getProducts();
+  }
 
 
   return {
-    errors,
     products,
+    storeProduct,
+    deleteProduct,
     getProducts,
-    storeProduct
+    errors,
   };
 }
