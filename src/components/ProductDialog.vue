@@ -7,7 +7,7 @@
   >
     <v-card>
       <v-card-title class="text-h5 grey lighten-2">
-        Add New Product
+        {{title}} Product
       </v-card-title>
       <v-container>
         <v-text-field v-model="name"
@@ -56,7 +56,8 @@ export default {
   props: {
     editedId: Number,
     dialog: Boolean,
-    dialogProduct: Object
+    dialogProduct: Object,
+    title: String
   },
   watch: { 
     dialogProduct: function(newVal) { // watch it

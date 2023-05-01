@@ -11,6 +11,7 @@
     <ProductDialog 
       :edited-id="editedId"
       :dialog.sync="dialog"
+      :title="title"
       :dialog-product="dialogProduct"
       @open-dialog="
         editedId = 999;
@@ -77,7 +78,9 @@
         products: products,
         editedId: null,
         dialog: false,
-        dialogProduct: null
+        dialogProduct: null,
+        renderComponent: true,
+        title: "Add New"
       }
     },
     methods: {
@@ -93,6 +96,7 @@
       async editItem(id) {
         await getProduct(id);
         this.dialogProduct = product.value;
+        this.title = "Edit"
         this.dialog = true;
       },
     }
