@@ -21,7 +21,7 @@ export default function useProducts(){
 
   const storeProduct = async (data) =>{
     try {
-      await axios.post("products", data)
+      await axios.post("products", data);
       await getProducts();
     } catch (error) {
         if(error.response.status === 422){

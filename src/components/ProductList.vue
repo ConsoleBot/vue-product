@@ -56,10 +56,8 @@
     components: {
       ProductDialog,
     },
-    mounted: function () {
-      this.$nextTick(function () {
-        getProducts();
-      })
+    mounted() {
+      getProducts();
     },
     data () {
       return {

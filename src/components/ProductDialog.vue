@@ -58,9 +58,8 @@ export default {
     dialog: Boolean,
     dialogProduct: Object
   },
-   watch: { 
-    dialogProduct: function(newVal, oldVal) { // watch it
-      console.log('Prop changed: ', newVal, ' | was: ', oldVal)
+  watch: { 
+    dialogProduct: function(newVal) { // watch it
       this.name = newVal.name
       this.price = newVal.price
       this.quantity = newVal.quantity
@@ -88,9 +87,6 @@ export default {
     },
     close() {
       this.$emit("close-dialog");
-      if (this.editedId === null) {
-        this.$emit("open-dialog");
-      }
     },
   }
 }
