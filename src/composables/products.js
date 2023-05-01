@@ -6,7 +6,7 @@ axios.defaults.baseURL = "http://127.0.0.1:8000/api/";
 export default function useProducts(){
 
   const products = ref([]);
-  // const product = ref([]);
+  const product = ref([]);
   const errors = ref([]);
   // const router = useRouter();
 
@@ -14,10 +14,10 @@ export default function useProducts(){
       const response = await axios.get("products");
       products.value = response.data.data;
   }
-  // const getProduct = async (id) =>{
-  //     const response =  await axios.get("products/" + id);
-  //     product.value = response.data.data;
-  // }
+  const getProduct = async (id) =>{
+      const response =  await axios.get("products/" + id);
+      product.value = response.data.data;
+  }
 
   const storeProduct = async (data) =>{
     try {
@@ -53,9 +53,11 @@ export default function useProducts(){
 
   return {
     products,
+    product,
     storeProduct,
     deleteProduct,
     getProducts,
+    getProduct,
     errors,
   };
 }

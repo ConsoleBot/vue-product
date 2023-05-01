@@ -1,68 +1,74 @@
 <template>
-  <div class="text-center">
-    <v-dialog
-      v-model="dialog"
-      width="500"
-    >
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn
-          color="blue lighten-2"
-          dark
-          v-bind="attrs"
-          v-on="on"
+  <v-dialog
+    :value="dialog"
+    @input="$emit('input', $event)"
+    width="500"
+    persistent
+  >
+    <v-card>
+      <v-card-title class="text-h5 grey lighten-2">
+        Add New Product
+      </v-card-title>
+      <v-container>
+        <v-text-field v-model="name"
+          label="Product Name" type="text"
+        ></v-text-field>
+        <v-text-field v-model="price"
+          label="Product Price"  type="number"
+        ></v-text-field>
+        <v-text-field v-model="quantity"
+          label="Product Quantity"  type="number"
+        ></v-text-field>
+        <v-textarea
+          name="input-7-1" v-model="description"
+          label="Product Description"
+          value=""
+        ></v-textarea>
+      </v-container>
+      <v-divider></v-divider>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+         <v-btn
+          color="primary"
+          text
+          @click="close"
         >
-          Add Product
+          Cancel
         </v-btn>
-      </template>
-
-      <v-card>
-        <v-card-title class="text-h5 grey lighten-2">
-          Add New Product
-        </v-card-title>
-
-        <v-container>
-          <v-text-field v-model="name"
-            label="Product Name" type="text"
-          ></v-text-field>
-          <v-text-field v-model="price"
-            label="Product Price"  type="number"
-          ></v-text-field>
-          <v-text-field v-model="quantity"
-            label="Product Quantity"  type="number"
-          ></v-text-field>
-          <v-textarea
-            name="input-7-1" v-model="description"
-            label="Product Description"
-            value=""
-          ></v-textarea>
-        </v-container>
-        <v-divider></v-divider>
-
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn
-            color="primary"
-            text
-            @click="add"
-          >
-            Add
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </div>
+        <v-btn
+          color="primary"
+          text
+          @click="add"
+        >
+          Add
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 <script>
-// import API from "@/services/API";
 import useProducts from "@/composables/products.js";
 
 const { storeProduct } = useProducts();
 
 export default {
   name: 'ProductDialog',
+  props: {
+    editedId: Number,
+    dialog: Boolean,
+    dialogProduct: Object
+  },
+   watch: { 
+    dialogProduct: function(newVal, oldVal) { // watch it
+      console.log('Prop changed: ', newVal, ' | was: ', oldVal)
+      this.name = newVal.name
+      this.price = newVal.price
+      this.quantity = newVal.quantity
+      this.description = newVal.description
+    }
+  },
   data () {
       return {
-        dialog: false,
         name: null,
         quantity: null,
         price: null,
@@ -77,9 +83,15 @@ export default {
         price: parseFloat(this.price).toFixed('2'),
         description: this.description,
       };
-      storeProduct(product_data)
-      this.dialog = false;
-    }
+      storeProduct(product_data);
+      this.$emit("close-dialog");
+    },
+    close() {
+      this.$emit("close-dialog");
+      if (this.editedId === null) {
+        this.$emit("open-dialog");
+      }
+    },
   }
 }
 </script>
